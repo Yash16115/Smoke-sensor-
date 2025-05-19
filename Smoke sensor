@@ -1,0 +1,49 @@
+#include <wire.h>
+#include <LiquidCrystal_I2C.h>
+
+const int smokesensor=A0;
+const int Buzzer=7;
+const int relay=6;
+const int led=8;
+const int normalThreshold=200;
+const int mediumThreshold=400;
+
+LiquidCrystal_I2C lcd(0×27,16,2);
+
+void setup(){
+pinMode(smokesensor,INPUT);
+pinMode(Buzzer,OUTPUT);
+pinMode(relay,OUTPUT);
+pinMode(led, OUTPUT);
+Serial.begin(9600);
+
+lcd.begin();
+lcd.backlight();
+lcd.setCursor(0, 0);
+lcd.print("smoke detector");
+delay(2000);
+lcd.clear();
+}
+
+void loop(){
+if (smokelevel < normalThreshold){
+lcd.setCursor(0, 1);
+lcd.print("level:normal");
+digitalWrite(Buzzer,LOW);
+digitalWrite(led,LOW);
+digitalWrite(relay,LOW);
+}
+else if (smokelevel < mediumThreshold){
+lcd.setCursor(0, 1);
+lcd.print("level:medium");
+digitalWrite(Buzzer,HIGH);
+digitalWrite(led,LOW);
+digitalWrite(relay,LOW);
+}
+else{
+lcd.setCursor(0, 1);
+lcd.print("level:HIGH");
+digitalWrite(Buzzer,HIGH);
+digitalWrite(led,HIGH);
+digitalWrite(relay,HIGH);
+}
